@@ -72,16 +72,9 @@ class OpensubtitlesDataset(Dataset):
         return "OpenSubtitles"
 
     def _download(self):
-        if not os.path.exists('components/opensubtitles'):
-            # todo: host result
-            sh("""
-            git clone https://github.com/sdtblck/Opensubtitles_dataset components/opensubtitles
-            cd components/opensubtitles
-            virtualenv env
-            . env/bin/activate
-            pip install -r requirements.txt
-            python3 parse_opensubtitle_xml.py
-            """)
+        download('components/opensubtitles/opensubtitles_out.tar', 'f3039709677292f899bb0a8fa2dbc6ae785f9e33ffd7613f94f4f722f2dfd95c', [
+            Source('direct', 'https://eaidata.bmk.sh/data/opensubtitles_out.tar'),
+        ], extract=True)
 
     def documents(self):
         self._download()
@@ -105,6 +98,7 @@ class BookCorpusDataset(Dataset):
 
     def _download(self):
         download('components/bookcorpus/books1.tar.gz', 'e3c993cc825df2bdf0f78ef592f5c09236f0b9cd6bb1877142281acc50f446f9', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/books1.tar.gz'),
             Source('direct', 'http://battle.shawwn.com/sdb/books1/books1.tar.gz'),
         ], extract=True)
 
@@ -233,17 +227,9 @@ class EnronEmailsDataset(Dataset):
         return "Enron Emails"
 
     def _download(self):
-        if not os.path.exists('components/enron_emails'):
-            sh("""
-            mkdir -p components/enron_emails
-            cd components/enron_emails
-            git clone https://github.com/EleutherAI/pile_enron_emails .
-            virtualenv env
-            . env/bin/activate
-            pip install -r requirements.txt
-            python main.py
-            """)
-            sha256sum('components/enron_emails/enron_mail_20150507.tar.gz', 'b3da1b3fe0369ec3140bb4fbce94702c33b7da810ec15d718b3fadf5cd748ca7')
+        download('components/enron_emails/enron_mail_20150507.tar.gz', 'b3da1b3fe0369ec3140bb4fbce94702c33b7da810ec15d718b3fadf5cd748ca7', [
+            Source('direct', 'https://eaidata.bmk.sh/data/enron_mail_20150507.tar.gz'),
+        ])
 
     def documents(self):
         self._download()
@@ -267,6 +253,7 @@ class LiteroticaDataset(Dataset):
 
     def _download(self):
         download('components/literotica/Literotica.jsonl.zst', '3c6b968f851831c6345f175b394416f7521da3bacd90fdc827093f0d310bd4ef', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/Literotica.jsonl.zst'),
             Source('gdrive', 'https://drive.google.com/uc?id=1Nx63w9BFZZSI_s2pmJnhcBU9c-y803T7'),
         ])
 
@@ -354,6 +341,7 @@ class UbuntuIRCDataset(Dataset):
 
     def _download(self):
         download('components/ubuntu_irc/ubuntu_irc_until_2020_9_1.jsonl.zst', 'b2bd119beb2741f428c7f1de954794718ce6e8090e3125be5e64845bb320767e', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/ubuntu_irc_until_2020_9_1.jsonl.zst'),
             Source('direct', 'https://eaidata.bmk.sh/data/ubuntu_irc_until_2020_9_1.jsonl.zst'),
         ])
 
@@ -403,13 +391,10 @@ class PubMedDataset(Dataset):
         return "PubMed Abstracts"
 
     def _download(self):
-        if not os.path.exists('components/pubmed'):
-            sh("""
-            mkdir -p components/pubmed
-            cd components/pubmed
-            wget https://eaidata.bmk.sh/data/PUBMED_title_abstracts_2019_baseline.jsonl.zst
-            """)
-            sha256sum('components/pubmed/PUBMED_title_abstracts_2019_baseline.jsonl.zst', '15c26a83ac2b11378b8e6ba5a16bab92428de29bacb85709834948cfcf1f029b')
+        download('components/pubmed/PUBMED_title_abstracts_2019_baseline.jsonl.zst', '15c26a83ac2b11378b8e6ba5a16bab92428de29bacb85709834948cfcf1f029b', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/PUBMED_title_abstracts_2019_baseline.jsonl.zst'),
+            Source('direct', 'https://eaidata.bmk.sh/data/PUBMED_title_abstracts_2019_baseline.jsonl.zst'),
+        ])
 
     def documents(self):
         self._download()
@@ -431,16 +416,10 @@ class ExPorterDataset(Dataset):
         return "NIH ExPorter"
 
     def _download(self):
-        if not os.path.exists('components/exporter'):
-            sh("""
-            mkdir -p components/exporter
-            cd components/exporter
-            virtualenv env
-            . env/bin/activate
-            pip install gdown
-            gdown https://drive.google.com/uc?id=11mO-0LuL2YeKoqqWXyHPHf3d2ODnjVPP
-            """)
-            sha256sum('components/exporter/NIH_ExPORTER_awarded_grant_text.jsonl.zst', 'be7fc69b9a3652391b6567891b99277ac99e7dfd5892ba19cb312f909357c458')
+        download('components/exporter/NIH_ExPORTER_awarded_grant_text.jsonl.zst', 'be7fc69b9a3652391b6567891b99277ac99e7dfd5892ba19cb312f909357c458', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/NIH_ExPORTER_awarded_grant_text.jsonl.zst'),
+            Source('gdrive', 'https://drive.google.com/uc?id=11mO-0LuL2YeKoqqWXyHPHf3d2ODnjVPP'),
+        ])
 
     def documents(self):
         self._download()
@@ -462,14 +441,10 @@ class StackExchangeDataset(Dataset):
         return "StackExchange"
 
     def _download(self):
-        if not os.path.exists('components/stackexchange'):
-            sh("""
-            mkdir -p components/stackexchange
-            cd components/stackexchange
-            wget https://eaidata.bmk.sh/data/stackexchange_dataset.tar
-            tar xf stackexchange_dataset.tar
-            """)
-            sha256sum('components/stackexchange/stackexchange_dataset.tar')
+        download('components/stackexchange/stackexchange_dataset.tar', 'f64f31d20db8d8692c1a019314a14974b4911a34ffef126feaf42da88860c666', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/stackexchange_dataset.tar'),
+            Source('direct', 'https://eaidata.bmk.sh/data/stackexchange_dataset.tar'),
+        ], extract=True)
 
     def documents(self):
         self._download()
@@ -485,21 +460,16 @@ class StackExchangeDataset(Dataset):
     def num_docs(self):
         return 15622475
 
+
 class FreeLawDataset(Dataset):
     def name(self):
         return "FreeLaw"
 
     def _download(self):
-        if not os.path.exists('components/freelaw'):
-            sh("""
-            mkdir -p components/freelaw
-            cd components/freelaw
-            virtualenv env
-            . env/bin/activate
-            pip install gdown
-            gdown https://drive.google.com/uc?id=1L-x3g3V888gHNUVHQWDkJBJHs5N02Kjz
-            """)
-            sha256sum('components/freelaw/FreeLaw_Opinions.jsonl.zst', '7d7ba907cf397e8585bb3ef148b3e9678edbf142b2247460f907c16aecbaed2d')
+        download('components/freelaw/FreeLaw_Opinions.jsonl.zst', '7d7ba907cf397e8585bb3ef148b3e9678edbf142b2247460f907c16aecbaed2d', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/FreeLaw_Opinions.jsonl.zst'),
+            Source('gdrive', 'https://drive.google.com/uc?id=1L-x3g3V888gHNUVHQWDkJBJHs5N02Kjz'),
+        ])
 
     def documents(self):
         self._download()
@@ -521,13 +491,10 @@ class PubMedCentralDataset(Dataset):
         return "PubMed Central"
 
     def _download(self):
-        if not os.path.exists('components/pubmedcentral'):
-            sh("""
-            mkdir -p components/pubmedcentral
-            cd components/pubmedcentral
-            wget https://eaidata.bmk.sh/data/PMC_extracts.tar.gz
-            """)
-            sha256sum('components/pubmedcentral/PMC_extracts.tar.gz')
+        download('components/pubmedcentral/PMC_extracts.tar.gz', 'dd2ecc79480bd5b78c29ea78af96941c69f6bda3d36a7d510019ccc4848fb867', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/PMC_extracts.tar.gz'),
+            Source('direct', 'https://eaidata.bmk.sh/data/PMC_extracts.tar.gz'),
+        ])
 
     def documents(self):
         self._download()
@@ -549,6 +516,7 @@ class CZICDataset(Dataset):
         return "CZIC"
 
     def _download(self):
+        # todo: convert CZIC
         if not os.path.exists('components/czic'):
             sh("""
             mkdir -p components/czic
@@ -580,16 +548,10 @@ class PhilPapersDataset(Dataset):
         return "PhilPapers"
 
     def _download(self):
-        if not os.path.exists('components/philpapers'):
-            sh("""
-            mkdir -p components/philpapers
-            cd components/philpapers
-            virtualenv env
-            . env/bin/activate
-            pip install gdown
-            gdown https://drive.google.com/uc?id=1u01vkBNAS8jtu0AZeQW56bzf-6QbeSRB
-            """)
-            sha256sum('components/philpapers/PhilArchive.jsonl.zst', 'e90529b9b3961328d1e34b60534a8e0f73d5ad1f104e22a217de53cd53c41fea')
+        download('components/philpapers/PhilArchive.jsonl.zst', 'e90529b9b3961328d1e34b60534a8e0f73d5ad1f104e22a217de53cd53c41fea', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/PhilArchive.jsonl.zst'),
+            Source('gdrive', 'https://drive.google.com/uc?id=1u01vkBNAS8jtu0AZeQW56bzf-6QbeSRB'),
+        ])
 
     def documents(self):
         self._download()
@@ -611,19 +573,15 @@ class USPTODataset(Dataset):
         return "USPTO"
 
     def _download(self):
-        if not os.path.exists('components/uspto'):
-            sh("""
-            mkdir -p components/uspto
-            cd components/uspto
-            wget https://eaidata.bmk.sh/data/pile_uspto.tar
-            tar xf pile_uspto.tar
-            """)
-            sha256sum('components/uspto/pile_uspto.tar')
+        download('components/uspto/pile_uspto.jsonl.zst.tar', '7a7d2c8e21df2ad0324810a8e675f4d8bdc5ee40b17914a6c0542ddfda1560fd', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/pile_uspto.tar'),
+            Source('direct', 'https://eaidata.bmk.sh/data/pile_uspto.tar'),
+        ])
 
     def documents(self):
         self._download()
 
-        yield from lmd.Reader('components/uspto/pile_uspto').stream_data()
+        yield from lmd.Reader('components/uspto/pile_uspto.jsonl.zst.tar').stream_data()
 
     def clean(self):
         rm_if_exists('components/uspto')
@@ -640,16 +598,10 @@ class EuroParlDataset(Dataset):
         return "EuroParl"
 
     def _download(self):
-        if not os.path.exists('components/europarl'):
-            sh("""
-            mkdir -p components/europarl
-            cd components/europarl
-            virtualenv env
-            . env/bin/activate
-            pip install gdown
-            gdown https://drive.google.com/uc?id=12Q23Y7IKQyjF28xH0Aw6yZaYEx2YIOiB
-            """)
-            sha256sum('components/europarl/EuroParliamentProceedings_1996_2011.jsonl.zst', '6111400e7b7f75ce91fed1b5fc0a3630b8263217bd01ce75f7d8701f26ac0e98')
+        download('components/europarl/EuroParliamentProceedings_1996_2011.jsonl.zst', '6111400e7b7f75ce91fed1b5fc0a3630b8263217bd01ce75f7d8701f26ac0e98', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/EuroParliamentProceedings_1996_2011.jsonl.zst'),
+            Source('gdrive', 'https://drive.google.com/uc?id=12Q23Y7IKQyjF28xH0Aw6yZaYEx2YIOiB'),
+        ])
 
     def documents(self):
         self._download()
@@ -671,13 +623,10 @@ class YTSubtitlesDataset(Dataset):
         return "YoutubeSubtitles"
 
     def _download(self):
-        if not os.path.exists('components/youtubesubtitles'):
-            sh("""
-            mkdir -p components/youtubesubtitles
-            cd components/youtubesubtitles
-
-            wget https://eaidata.bmk.sh/data/yt_subs.jsonl.zst
-            """)
+        download('components/youtubesubtitles/yt_subs.jsonl.zst', '0b9130b8c92290eba360337fea90c2617721f65d955f785f8755cb5f4a8e319c', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/yt_subs.jsonl.zst'),
+            Source('direct', 'https://eaidata.bmk.sh/data/yt_subs.jsonl.zst'),
+        ])
 
     def documents(self):
         self._download()
@@ -699,13 +648,10 @@ class HackerNewsDataset(Dataset):
         return "HackerNews"
 
     def _download(self):
-        if not os.path.exists('components/hackernews'):
-            sh("""
-            mkdir -p components/hackernews
-            cd components/hackernews
-
-            wget https://eaidata.bmk.sh/data/hn.tar.gz
-            """)
+        download('components/hackernews/hn.tar.gz', '6220e1dcd5d9d71821fee552e4e154ee1ee5f62744e3eab9a4c5001f52e27067', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/hn.tar.gz'),
+            Source('direct', 'https://eaidata.bmk.sh/data/hn.tar.gz'),
+        ])
 
     def documents(self):
         self._download()
@@ -727,13 +673,10 @@ class GithubDataset(Dataset):
         return "Github"
 
     def _download(self):
-        if not os.path.exists('components/github'):
-            sh("""
-            mkdir -p components/github
-            cd components/github
-
-            wget https://the-eye.eu/public/AI/pile_preliminary_components/github.tar -O github.jsonl.zst.tar
-            """)
+        download('components/github/github.jsonl.zst.tar', 'f7a66e8226baf075a42628d10d8eba234460da73b0ffd300736036db9be3b3c3', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/github.tar'),
+            Source('direct', 'https://eaidata.bmk.sh/data/github.tar'),
+        ])
 
     def documents(self):
         self._download()
@@ -755,13 +698,10 @@ class OpenWebText2Dataset(Dataset):
         return "OpenWebText2"
 
     def _download(self):
-        if not os.path.exists('components/openwebtext2'):
-            sh("""
-            mkdir -p components/openwebtext2
-            cd components/openwebtext2
-
-            wget https://eaidata.bmk.sh/data/openwebtext2.jsonl.zst.tar
-            """)
+        download('components/openwebtext2/openwebtext2.jsonl.zst.tar', '9043d1b93c35ff1a38a17e16c73c009d4617dcaab6da15adc0faf4779739a027', [
+            Source('direct', 'https://the-eye.eu/public/AI/pile_preliminary_components/openwebtext2.jsonl.zst.tar'),
+            Source('direct', 'https://eaidata.bmk.sh/data/openwebtext2.jsonl.zst.tar'),
+        ])
 
     def documents(self):
         self._download()
@@ -776,3 +716,27 @@ class OpenWebText2Dataset(Dataset):
     
     def num_docs(self):
         return 17103059
+
+
+class CommonCrawlDataset(Dataset):
+    def name(self):
+        return "CommonCrawl"
+
+    def _download(self):
+        download('components/commoncrawl/pile_cc_filtered.jsonl.zst.tar', 'b5310602517a90f02dfa1952edc73c9e791d4144ba49d9e0ea0fd17334108320', [
+            Source('direct', 'https://eaidata.bmk.sh/data/pile_cc_filtered.jsonl.zst.tar'),
+        ])
+
+    def documents(self):
+        self._download()
+
+        yield from lmd.Reader('components/commoncrawl/pile_cc_filtered.jsonl.zst.tar').stream_data()
+
+    def clean(self):
+        rm_if_exists('components/commoncrawl')
+    
+    def size(self):
+        return 319297037855
+    
+    def num_docs(self):
+        return 74966902
